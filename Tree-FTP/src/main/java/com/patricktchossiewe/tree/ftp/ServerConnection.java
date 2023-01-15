@@ -5,11 +5,11 @@
 package com.patricktchossiewe.tree.ftp;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 
 /**
@@ -18,68 +18,68 @@ import java.util.ArrayList;
  */
 public class ServerConnection {
     
-    private String ipAddress;
+    private String server;
     private int port;
     private Socket clientSocket;
+    private BufferedReader reader;
+    private BufferedWriter writer;
+    
 
-    public ServerConnection(String ipAddress, int port) {
-        this.ipAddress = ipAddress;
+    public ServerConnection(String server, int port) {
+        this.server = server;
         this.port = port;
     }
     /**
-     * this method is used to create the Socket and connect to the specified server
+     *  cette methode permets de se connecter au serveur
      */
     public void connect(){
-         
         try {
-             clientSocket = new Socket(ipAddress, port);
-            
+                clientSocket = new Socket(server, port);
+                reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                printServerRespondse();
+             
         } catch (IOException ex) {
-             System.out.println("erreur lors de l'ouverture de la connection");
+                System.out.println("erreur lors de l'ouverture de la connection");
         }
     }
+    
     /**
-     * tihs method is used to read data from server
-     * @return retruns an Arraylist that contain the response of the server
+     * cette methode permets d'envoyer une commande au serveur et d'afficher la reponse
+     * @param command 
      */
-    public ArrayList<String> readDataFromServer(){
-        
-        ArrayList<String> serverResponse = new ArrayList();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String line;
-            while((line = reader.readLine())!= null){
-               serverResponse.add(line);
-            }
-            reader.close();
-        } catch (IOException ex) {
-            System.out.println("erreur lors de la lecture");
-        }
-            return serverResponse;
-    }
-    
     public void sendCommand(String command){
-    
-        PrintStream out = null;
         try {
-            out = new PrintStream(clientSocket.getOutputStream());
-            out.println(command);
-        } catch (IOException ex) {
-            System.out.println("erreur lors de l'envoie de la commande "+command);
-        } finally {
-            out.close();
+                writer.write(command);
+                writer.newLine();
+                writer.flush();
+                printServerRespondse();
+        } catch (IOException e) {
+                System.out.println("impossible d'envoyer la commande au serveur");
         }
     }
-    
     
     /**
-     * this methosd is used to close the connection between server and our client
+     * cette methode permets d'afficher la reponse du serveur
+     */
+    public void printServerRespondse(){
+        try {
+                System.out.println( reader.readLine());
+        } catch (IOException ex) {
+                System.out.println("erreur lors de la lecture");
+        }
+    }
+
+    /**
+     * cette methode permets de fermer la connection avec le serveur
      */
    public void closeConnection(){
         try {
-            clientSocket.close();
+                reader.close();
+                writer.close();
+                clientSocket.close();
         } catch (IOException ex) {
-             System.out.println("erreur lors de la fermeture de la connection");
+                System.out.println("erreur lors de la fermeture de la connection");
         }
    }
 }

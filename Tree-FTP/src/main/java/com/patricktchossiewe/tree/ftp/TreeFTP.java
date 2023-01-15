@@ -5,7 +5,6 @@
 
 package com.patricktchossiewe.tree.ftp;
 
-import java.util.ArrayList;
 
 
 /**
@@ -16,8 +15,21 @@ public class TreeFTP {
 
     public static void main(String[] args) {
         
-        String servername = "ftp.ubuntu.com";
+        String servername = "";
+        String username = "";
+        String password = "";
         int port = 21;
+        
+        if(args.length > 0){
+            if(args.length >= 3){
+                username = args[1];
+                password = args[2];
+            }
+            servername = args[0];
+        } else {
+                System.out.println("Inserez le nom du serveur!\n"+"inserez le nom d'utilisateur(optionnel)\n"+"inserez le mot de passe(optionnel)");
+                return;
+        }
         
         //instanciation de la classe ServerConnection
         ServerConnection serverConnection = new ServerConnection(servername, port);
@@ -25,25 +37,16 @@ public class TreeFTP {
         //connection au serveur
         serverConnection.connect();
         
-        //on recupere et on affiche la reponse du serveur
-        ArrayList<String> responses = serverConnection.readDataFromServer();
-        printServerResponse(responses);
+        //on effectue le logging et on affiche le repertoir actuel
+        String userCommand = "USER "+username;
+        String passwordCommand = "PASS "+password;
+        String currentDirectory = "PWD";
         
-        //on envoie la commande ensuite on recupere la reponse et on affiche
-        String command = "USER anonymous";
-        serverConnection.sendCommand(command);
-        ArrayList<String> responses_command = serverConnection.readDataFromServer();
-        printServerResponse(responses_command);
-        
+        serverConnection.sendCommand(userCommand);
+        serverConnection.sendCommand(passwordCommand);
+        serverConnection.sendCommand(currentDirectory);
+ 
         //on ferme la connection
         serverConnection.closeConnection();
-            
-    }
-    
-    static void printServerResponse(ArrayList<String> responses){
-    
-        for (String response : responses) {
-            System.out.println("reponse du serveur: "+response);  
-        }
     }
 }
