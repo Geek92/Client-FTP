@@ -5,6 +5,9 @@
 
 package com.patricktchossiewe.tree.ftp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 /**
@@ -41,10 +44,21 @@ public class TreeFTP {
         String userCommand = "USER "+username;
         String passwordCommand = "PASS "+password;
         String currentDirectory = "PWD";
+        String binnaryModeCommand = "TYPE I";  
+        String passiveCommand = "PASV";
+        String listCommand = "LIST";
         
-        serverConnection.sendCommand(userCommand);
-        serverConnection.sendCommand(passwordCommand);
-        serverConnection.sendCommand(currentDirectory);
+        List<String> commandList = new ArrayList();
+        commandList.add(userCommand);
+        commandList.add(passwordCommand);
+        commandList.add(currentDirectory);
+        commandList.add(binnaryModeCommand);
+        commandList.add(passiveCommand);
+        commandList.add(listCommand);
+        
+        for (String command : commandList) {
+            serverConnection.sendCommand(command);
+        }
  
         //on ferme la connection
         serverConnection.closeConnection();

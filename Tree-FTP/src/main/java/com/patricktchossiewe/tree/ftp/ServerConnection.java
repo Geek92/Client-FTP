@@ -18,8 +18,8 @@ import java.net.Socket;
  */
 public class ServerConnection {
     
-    private String server;
-    private int port;
+    private final String server;
+    private final int port;
     private Socket clientSocket;
     private BufferedReader reader;
     private BufferedWriter writer;
