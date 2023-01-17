@@ -48,16 +48,25 @@ public class TreeFTP {
         String passiveCommand = "PASV";
         String listCommand = "LIST";
         
-        List<String> commandList = new ArrayList();
-        commandList.add(userCommand);
-        commandList.add(passwordCommand);
-        commandList.add(currentDirectory);
-        commandList.add(binnaryModeCommand);
-        commandList.add(passiveCommand);
-        commandList.add(listCommand);
+        List<String> controlCommands = new ArrayList();
+        List<String> dataCommands = new ArrayList();
         
-        for (String command : commandList) {
+        controlCommands.add(userCommand);
+        controlCommands.add(passwordCommand);
+        controlCommands.add(currentDirectory);
+        controlCommands.add(binnaryModeCommand);
+        controlCommands.add(passiveCommand);
+        
+        dataCommands.add(listCommand);
+        
+        for (String command : controlCommands) {
             serverConnection.sendCommand(command);
+        }
+        
+        serverConnection.opendataConnection();
+        
+        for (String dataCommand : dataCommands) {
+            serverConnection.sendCommand(dataCommand);
         }
  
         //on ferme la connection
