@@ -56,6 +56,7 @@ public class TreeFTP {
         controlCommands.add(currentDirectory);
         controlCommands.add(binnaryModeCommand);
         controlCommands.add(passiveCommand);
+        controlCommands.add(listCommand);
         
         dataCommands.add(listCommand);
         
@@ -68,8 +69,9 @@ public class TreeFTP {
         for (String dataCommand : dataCommands) {
             serverConnection.sendCommand(dataCommand);
         }
+       // serverConnection.printTreeCommand();
  
         //on ferme la connection
-        serverConnection.closeConnection();
+        serverConnection.closeControlConnection();
     }
 }
