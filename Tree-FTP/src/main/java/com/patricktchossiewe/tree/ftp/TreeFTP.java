@@ -55,21 +55,23 @@ public class TreeFTP {
         controlCommands.add(passwordCommand);
         controlCommands.add(currentDirectory);
         controlCommands.add(binnaryModeCommand);
-        controlCommands.add(passiveCommand);
-        controlCommands.add(listCommand);
+        //controlCommands.add(passiveCommand);
         
-        dataCommands.add(listCommand);
+        //dataCommands.add(listCommand);
         
         for (String command : controlCommands) {
             serverConnection.sendCommand(command);
         }
         
-        serverConnection.opendataConnection();
+        //on appeles la fonction printTreeCommand
+        //serverConnection.printTreeCommand();
         
-        for (String dataCommand : dataCommands) {
+        //serverConnection.opendataConnection();
+        
+        /*for (String dataCommand : dataCommands) {
             serverConnection.sendCommand(dataCommand);
-        }
-       // serverConnection.printTreeCommand();
+        }*/
+        serverConnection.printTreeCommand();
  
         //on ferme la connection
         serverConnection.closeControlConnection();
