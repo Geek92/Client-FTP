@@ -22,7 +22,7 @@ le projet est composé de deux classes:
 
 l'application ne permets pas d'afficher l'arborescence d'un système de fichiers.
 
-##comment compiler et executer l'application
+## comment compiler et executer l'application
 
 pour compiler le programme il faut:
 
